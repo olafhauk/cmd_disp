@@ -15,7 +15,7 @@ Only works for commands "ls", "qstat", "ps".
 =========================================================
 """
 
-# Olaf Hauk, Aug 2016
+# Olaf Hauk, Aug 2016, Feb 2017
 
 import sys
 sys.path.append( '/imaging/local/software/anaconda/2.4.1/2/lib/python2.7/lib-tk')
@@ -84,16 +84,6 @@ else:
         idx2 = idx1 + 1 + input_list[idx1+1:].index("+")
         command = input_list[idx1+1:idx2]
 
-# remove command from input
-del input_list[idx2+1:]
-
-command_string = ''
-for cc in input_list:
-    command_string = command_string + ' ' + cc
-
-cmd_type = command[0] # what kind of command
-
-
 # get display parameters
 # height/width of display window
 if "-d" in input_list:
@@ -104,6 +94,17 @@ if "-d" in input_list:
     disp_dims = [int(d_str[0]), int(d_str[1])]
 else:
     disp_dims = [50,100]
+
+print disp_dims
+
+# remove command from input
+del input_list[idx2+1:]
+
+command_string = ''
+for cc in input_list:
+    command_string = command_string + ' ' + cc
+
+cmd_type = command[0] # what kind of command
 
 
 # check if command works
@@ -174,7 +175,10 @@ if cmd_type == 'ls':
     target_idx = -1     # by which item to identify names (e.g. filenames for ls)
     cmd_known = 1
 elif cmd_type == 'qstat':
-    start_line = 1 # first line empty
+    if len(command)>1: # user name specified
+        start_line = 1 # first line empty
+    else: # nothing specified
+        start_line = 0
     target_idx = 0
     cmd_known = 1
 elif cmd_type == 'showq': ### not yet ready (format input)
@@ -227,7 +231,8 @@ while 1<2: # keep going until exit button pressed
 
             if out_list:
                 if cmd_type == 'qstat': # get column with status (R/C/E), -1 because of "Job ID"
-                    S_col = out_list[2].split().index('S') - 1            
+                    # take into account format difference depending on whether user name is specified or not
+                    S_col = out_list[len(command)-1].split().index('S') - 1
             else:
                 S_col = []
 
@@ -248,7 +253,7 @@ while 1<2: # keep going until exit button pressed
                             out_keep['colours'][targ_now] = colours['error']
                         else: # if something has changed and no error
                             if out_keep['colours'][targ_now] != colours['error']: # if there was an error, keep red
-                                out_keep['colours'][targ_now] = colours['smooth'] # if something has changed, print text in red
+                                out_keep['colours'][targ_now] = colours['smooth'] # if something has changed, print text in green
                 else:
                     if cnt>0: # if it's a new line added to existing line: smooth
                         out_keep['colours'][targ_now] = colours['smooth']
