@@ -56,15 +56,15 @@ if not input_list:
     print "========================================================="
     print "Continuously displays linux command output and highlights changes."
     print "Linux command must be placed between + +."
+    print "Only works for commands \"ls\", \"qstat\", \"ps."
     print "Usage: cmd_disp + <command> + [-d <height>x<width>]"
     print "e.g. cmd_disp + ls -l + -d 200x100"
     print "Default text colour is black. Changes are highlighted in green."
-    print "For qstat, errors are highlighted in red."
+    print "For qstat, completed processes are highlighted in red."
     print "The \"Reset\" button changes text to default colour."
     print "The \"Snap\" button opens a new window with a snapshot of the "
     print "current window (e.g. for copy&paste)."
-    print "The \"Quit\" button - guess..."
-    print "Only works for commands \"ls\", \"qstat\", \"ps."
+    print "The \"Quit\" button - guess..."    
     print "========================================================="
     exit()
 
