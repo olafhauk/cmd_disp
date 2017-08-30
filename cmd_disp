@@ -3,19 +3,19 @@
 =========================================================
 Continuously displays linux command output and highlights changes.
 Linux command must be placed between + +.
+Only works for commands "ls", "qstat", "ps".
 Usage: cmd_disp + <command> + [-d <height>x<width>]
 e.g. cmd_disp + ls -l + -d 200x100
 Default text colour is black. Changes are highlighted in green.
-For qstat, errors are highlighted in red.
+For qstat, completed processes are highlighted in red.
 The "Reset" button changes text to default colour.
 The "Snap" button opens a new window with a snapshot of the 
 current window (e.g. for copy&paste).
 The "Quit" button - guess...
-Only works for commands "ls", "qstat", "ps".
 =========================================================
 """
 
-# Olaf Hauk, Aug 2016, Feb 2017
+# Olaf Hauk, Aug 2016, Feb 2017, Aug 2017
 
 import sys
 sys.path.append( '/imaging/local/software/anaconda/2.4.1/2/lib/python2.7/lib-tk')
@@ -69,7 +69,7 @@ if not input_list:
     exit()
 
 # time between command updates in s
-sleep_time = 0.01
+sleep_time = 0.05
 
 # get command between ++ as list
 if not "+" in input_list:
@@ -249,7 +249,7 @@ while 1<2: # keep going until exit button pressed
                     line_idx = targets.index(targ_now)
                                 
                     if out_list[line_idx] != out_keep['lines'][targ_now]: # check if something has changed for this file
-                        if cmd_type == 'qstat' and out_list[line_idx].split()[S_col] == 'E': # error message in red
+                        if cmd_type == 'qstat' and out_list[line_idx].split()[S_col] == 'C': # when completed: text in red
                             out_keep['colours'][targ_now] = colours['error']
                         else: # if something has changed and no error
                             if out_keep['colours'][targ_now] != colours['error']: # if there was an error, keep red
